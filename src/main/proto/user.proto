@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.muyoma.grpc";
+option java_outer_classname = "UserProto";
+
+package user;
+
+// User message
+message User {
+  int64 id = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string phoneNumber = 4;
+  string email = 5;
+  string password = 6;
+  int32 validationCode = 7;
+  bool verificationStatus = 8;
+}
+
+// Request to get a user by ID
+message GetUserRequest {
+  int64 id = 1;
+  string email = 2;
+}
+
+// Response wrapping a User
+message UserResponse {
+  User user = 1;
+}
+
+// Request to create a user
+message CreateUserRequest {
+  string firstName = 1;
+  string lastName = 2;
+  string phoneNumber = 3;
+  string email = 4;
+  string password = 5;
+  int32 validationCode = 6;
+  bool verificationStatus = 7;
+}
+
+// Response after creating a user
+message CreateUserResponse {
+  int64 id = 1;
+  string message = 2;
+}
+
+// Request to login
+message LoginRequest {
+  string email = 1;
+  string password = 2;
+}
+
+// Response after login
+message LoginResponse {
+  bool success = 1;
+  string message = 2;
+  string token = 3;
+  User user = 4;
+}
+
+// Request to verify validation code
+message VerifyCodeRequest {
+  string email = 1;
+  int32 code = 2;
+}
+
+// Response after verifying code
+message VerifyCodeResponse {
+  bool verified = 1;
+  string message = 2;
+}
+
+// gRPC User service
+service UserService {
+  rpc GetUser (GetUserRequest) returns (UserResponse);
+  rpc CreateUser (CreateUserRequest) returns (CreateUserResponse);
+  rpc Login (LoginRequest) returns (LoginResponse);
+  rpc VerifyCode (VerifyCodeRequest) returns (VerifyCodeResponse);
+}
